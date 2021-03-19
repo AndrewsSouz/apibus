@@ -1,4 +1,4 @@
-package com.technocorp.persistence.util;
+package com.technocorp.service.util;
 
 public class StringMessages {
 

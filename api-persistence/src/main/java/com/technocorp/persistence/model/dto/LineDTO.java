@@ -1,6 +1,6 @@
 package com.technocorp.persistence.model.dto;
 
-import com.technocorp.persistence.model.StopCoordinate;
+import com.technocorp.persistence.model.line.Coordinate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +15,5 @@ import java.util.List;
 public class LineDTO {
     private String code;
     private String name;
-    private List<StopCoordinate> itinerary;
+    private List<Coordinate> itinerary;
 }

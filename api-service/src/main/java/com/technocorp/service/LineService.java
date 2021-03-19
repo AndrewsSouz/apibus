@@ -1,6 +1,6 @@
-package com.technocorp.persistence.service;
+package com.technocorp.service;
 
-import com.technocorp.persistence.model.Line;
+import com.technocorp.persistence.model.line.Line;
 import com.technocorp.persistence.model.dto.LineDTO;
 
 import java.util.List;
@@ -18,6 +18,5 @@ public interface LineService {
     Line update(String id, Line line);
 
     void delete(String id);
-
 
 }

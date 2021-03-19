@@ -1,11 +1,13 @@
-package com.technocorp.integration;
+package com.technocorp.service.serviceimpl;
 
-import com.technocorp.persistence.model.AddressCoordinateWrapper;
-import com.technocorp.persistence.service.serviceimpl.LineServiceImpl;
+import com.technocorp.persistence.model.address.AddressCoordinateWrapper;
+import com.technocorp.persistence.model.dto.LineDTO;
+import com.technocorp.persistence.model.line.Line;
+import com.technocorp.persistence.model.line.Coordinate;
 import com.technocorp.util.Config;
-import com.technocorp.persistence.model.StopCoordinate;
-import com.technocorp.persistence.model.Line;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Distance;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class IntegrationService {
+public class IntegrationServiceImpl {
 
     private final RestTemplate restTemplate;
     private final StringBuilder builder;
@@ -28,13 +30,18 @@ public class IntegrationService {
 
 
     @Autowired
-    public IntegrationService(RestTemplate restTemplate, StringBuilder builder, LineServiceImpl lineService) {
+    public IntegrationServiceImpl(RestTemplate restTemplate, StringBuilder builder, LineServiceImpl lineService) {
         this.restTemplate = restTemplate;
         this.builder = builder;
         this.lineService = lineService;
         this.restTemplate.setMessageConverters(Config.messageConverter.get());
     }
 
+
+    public List<LineDTO> findLinesByAddressRange(String address, Distance distance) throws UnsupportedEncodingException {
+        var coordinates = searchAddress(address).getAddressCoordinates();
+        return lineService.findInCoordinateInRadius(coordinates[0],distance);
+    }
 
     public void saveAllLines() {
         var allLines = callAllLines();
@@ -60,7 +67,7 @@ public class IntegrationService {
                 .id(map.get("idlinha").toString())
                 .code(map.get("codigo").toString())
                 .name(map.get("nome").toString())
-                .itinerary((List<StopCoordinate>) list.stream()
+                .itinerary((List<Coordinate>) list.stream()
                         .filter(index -> index.toString().contains("lat="))
                         .collect(Collectors.toList()))
                 .build();
@@ -72,9 +79,22 @@ public class IntegrationService {
         builder.append(URLEncoder.encode(", Porto Alegre, RS, Brasil", StandardCharsets.UTF_8.toString())
                 .replace("+", "%20"));
         var uri = URI.create(builder.toString());
-        return Optional.ofNullable(restTemplate.getForObject(
-                uri, AddressCoordinateWrapper.class))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address not found."));
+        return restTemplate.getForObject(
+                uri, AddressCoordinateWrapper.class);
+    }
+
+    public List<Line> findLineByName(String name) {
+        return callAllLines()
+                .stream()
+                .filter(line -> StringUtils.containsIgnoreCase(line.getName(), name))
+                .collect(Collectors.toList());
+    }
+
+    public List<Line> findLineByPrefix(String prefix) {
+        return callAllLines()
+                .stream()
+                .filter(line -> StringUtils.containsIgnoreCase(line.getCode(), prefix))
+                .collect(Collectors.toList());
     }
 
 }

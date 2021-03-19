@@ -1,4 +1,4 @@
-package com.technocorp.persistence.model;
+package com.technocorp.persistence.model.line;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StopCoordinate {
+public class Coordinate {
     String lat;
     String lng;
 }

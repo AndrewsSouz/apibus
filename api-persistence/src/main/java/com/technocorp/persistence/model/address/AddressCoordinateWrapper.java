@@ -1,4 +1,4 @@
-package com.technocorp.persistence.model;
+package com.technocorp.persistence.model.address;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

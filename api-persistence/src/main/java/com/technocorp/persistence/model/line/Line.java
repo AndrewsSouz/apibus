@@ -1,4 +1,4 @@
-package com.technocorp.persistence.model;
+package com.technocorp.persistence.model.line;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,5 +22,5 @@ public class Line {
     @JsonProperty("nome")
     private String name;
     @JsonProperty("itinerario")
-    private List<StopCoordinate> itinerary;
+    private List<Coordinate> itinerary;
 }

@@ -1,14 +1,19 @@
 package com.technocorp.controller;
 
 
-import com.technocorp.persistence.model.Line;
+import com.technocorp.persistence.model.line.Line;
 import com.technocorp.persistence.model.dto.LineDTO;
-import com.technocorp.persistence.service.serviceimpl.LineServiceImpl;
+import com.technocorp.service.serviceimpl.IntegrationServiceImpl;
+import com.technocorp.service.serviceimpl.LineServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metric;
+import org.springframework.data.geo.Metrics;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +25,7 @@ import static org.springframework.http.HttpStatus.*;
 public class LineController {
 
     private final LineServiceImpl lineService;
+    private final IntegrationServiceImpl integrationServiceImpl;
 
     @GetMapping
     @ResponseStatus(OK)
@@ -33,6 +39,15 @@ public class LineController {
             throw new ResponseStatusException(BAD_REQUEST, "Must provide only one search parameter");
         }
         return lineService.findAll();
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(OK)
+    public List<LineDTO> findByRange(
+            @RequestParam String address,
+            @RequestParam("d") Double distance) throws UnsupportedEncodingException {
+        return integrationServiceImpl.findLinesByAddressRange(
+                address, new Distance(distance, Metrics.KILOMETERS));
     }
 
     @PostMapping

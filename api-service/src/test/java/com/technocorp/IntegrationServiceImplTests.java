@@ -1,13 +1,16 @@
 package com.technocorp;
 
-import com.technocorp.integration.IntegrationService;
+import com.technocorp.persistence.model.line.Line;
+import com.technocorp.persistence.repository.LineRepository;
+import com.technocorp.service.serviceimpl.IntegrationServiceImpl;
+import com.technocorp.service.serviceimpl.LineServiceImpl;
 import com.technocorp.util.BeanSupplier;
-import com.technocorp.persistence.model.Line;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -16,14 +19,21 @@ import java.io.UnsupportedEncodingException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {IntegrationService.class, BeanSupplier.class})
+@ContextConfiguration(classes = {
+        IntegrationServiceImpl.class,
+        BeanSupplier.class,
+        LineServiceImpl.class,
+        })
 //@Disabled
-class IntegrationServiceTests {
+class IntegrationServiceImplTests {
 
     private Line line;
 
     @Autowired
-    private IntegrationService integrationService;
+    private IntegrationServiceImpl integrationServiceImpl;
+
+    @MockBean
+    LineRepository lineRepository;
 
     @BeforeEach
     void setUp() {
@@ -36,20 +46,20 @@ class IntegrationServiceTests {
 
     @Test
     void shouldReturnAListOfLines() {
-        var response = this.integrationService.callAllLines();
+        var response = this.integrationServiceImpl.callAllLines();
         System.out.println(response);
         assertEquals(line, response.get(0));
     }
 
     @Test
     void shouldReturnALine(){
-        var response = integrationService.callLine("5472");
+        var response = integrationServiceImpl.callLine("5472");
         System.out.println(response);
         assertEquals("",response);
     }
     @Test
     void shouldReturnAnAddressCoordinate() throws UnsupportedEncodingException {
-        var response = integrationService.searchAddress("rua mali");
+        var response = integrationServiceImpl.searchAddress("rua mali");
         System.out.println(response);
         assertEquals("",response);
     }

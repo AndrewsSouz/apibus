@@ -45,7 +45,6 @@ allprojects {
 project(':api-integration') {
     dependencies {
         implementation project(':api-persistence')
-        implementation 'org.apache.commons:commons-lang3:3.12.0'
     }
     jar {
         enabled = true
@@ -59,6 +58,21 @@ project(':api-controller') {
     dependencies {
         implementation project(':api-persistence')
         implementation project(':api-integration')
+        implementation project(':api-service')
+    }
+    jar {
+        enabled = true
+    }
+    bootJar {
+        enabled = false
+    }
+}
+
+project(':api-service') {
+    dependencies{
+        implementation project(':api-persistence')
+        implementation project(':api-integration')
+        implementation 'org.apache.commons:commons-lang3:3.12.0'
     }
     jar {
         enabled = true

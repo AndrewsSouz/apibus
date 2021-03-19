@@ -1,13 +1,13 @@
-package com.technocorp.persistence.model;
+package com.technocorp.persistence.model.address;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class AddressCoordinate {
-    Double latitude;
-    Double longitude;
+    String latitude;
+    String longitude;
 }

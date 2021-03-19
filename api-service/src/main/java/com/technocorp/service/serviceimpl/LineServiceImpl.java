@@ -1,12 +1,14 @@
-package com.technocorp.persistence.service.serviceimpl;
+package com.technocorp.service.serviceimpl;
 
-import com.technocorp.persistence.model.StopCoordinate;
-import com.technocorp.persistence.model.Line;
+import com.technocorp.persistence.model.address.AddressCoordinate;
 import com.technocorp.persistence.model.dto.LineDTO;
+import com.technocorp.persistence.model.line.Coordinate;
+import com.technocorp.persistence.model.line.Line;
 import com.technocorp.persistence.repository.LineRepository;
-import com.technocorp.persistence.service.LineService;
-import com.technocorp.persistence.util.Mapper;
+import com.technocorp.service.LineService;
+import com.technocorp.service.util.Mapper;
 import lombok.AllArgsConstructor;
+import org.springframework.data.geo.Distance;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.technocorp.persistence.util.StringMessages.*;
+import static com.technocorp.service.util.StringMessages.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 
@@ -70,7 +72,7 @@ public class LineServiceImpl implements LineService {
         return lineRepository.save(line);
     }
 
-    public List<StopCoordinate> update(Line line) {
+    public List<Coordinate> update(Line line) {
         return lineRepository.save(line).getItinerary();
     }
 
@@ -78,6 +80,13 @@ public class LineServiceImpl implements LineService {
     public void delete(String code) {
         Objects.requireNonNull(code, NULL_CODE_MSG);
         lineRepository.deleteByCode(code);
+    }
+
+
+    public List<LineDTO> findInCoordinateInRadius(AddressCoordinate coordinate, Distance distance) {
+        return lineRepository.findByItineraryNear(coordinate, distance)
+                .stream().map(Mapper.toLineDTO)
+                .collect(Collectors.toList());
     }
 
     public boolean existsByCode(String code) {
