@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.UnsupportedEncodingException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
@@ -42,6 +44,12 @@ class IntegrationServiceTests {
     @Test
     void shouldReturnALine(){
         var response = integrationService.callLine("5472");
+        System.out.println(response);
+        assertEquals("",response);
+    }
+    @Test
+    void shouldReturnAnAddressCoordinate() throws UnsupportedEncodingException {
+        var response = integrationService.searchAddress("rua mali");
         System.out.println(response);
         assertEquals("",response);
     }

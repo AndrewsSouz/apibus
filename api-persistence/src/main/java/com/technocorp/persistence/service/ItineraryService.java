@@ -1,18 +1,18 @@
 package com.technocorp.persistence.service;
 
-import com.technocorp.persistence.model.Coordinate;
+import com.technocorp.persistence.model.StopCoordinate;
 
 import java.util.List;
 
 public interface ItineraryService {
 
-    List<Coordinate> findByCode(String code);
+    List<StopCoordinate> findByCode(String code);
 
-    List<Coordinate> save(String code, Coordinate coordinate);
+    List<StopCoordinate> save(String code, StopCoordinate stopCoordinate);
 
-    List<Coordinate> update(String code, Coordinate coordinate);
+    List<StopCoordinate> update(String code, StopCoordinate stopCoordinate);
 
-    void delete(String code, Coordinate coordinate);
+    void delete(String code, StopCoordinate stopCoordinate);
 
 
 }

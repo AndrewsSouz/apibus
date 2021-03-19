@@ -1,6 +1,6 @@
 package com.technocorp.persistence.service.serviceimpl;
 
-import com.technocorp.persistence.model.Coordinate;
+import com.technocorp.persistence.model.StopCoordinate;
 import com.technocorp.persistence.model.Line;
 import com.technocorp.persistence.repository.LineRepository;
 import com.technocorp.persistence.service.LineService;
@@ -62,7 +62,7 @@ public class LineServiceImpl implements LineService {
         return lineRepository.save(line);
     }
 
-    public List<Coordinate> update(Line line){
+    public List<StopCoordinate> update(Line line){
         return lineRepository.save(line).getItinerary();
     }
 

@@ -1,6 +1,6 @@
 package com.technocorp.controller;
 
-import com.technocorp.persistence.model.Coordinate;
+import com.technocorp.persistence.model.StopCoordinate;
 import com.technocorp.persistence.service.serviceimpl.ItineraryServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,29 +18,29 @@ public class ItineraryController {
 
     @GetMapping
     @ResponseStatus(OK)
-    public List<Coordinate> findByCode(@RequestParam String code) {
+    public List<StopCoordinate> findByCode(@RequestParam String code) {
         return itineraryService.findByCode(code);
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public List<Coordinate> save(@RequestParam String code,
-                                 @RequestBody Coordinate coordinate) {
-        return itineraryService.save(code, coordinate);
+    public List<StopCoordinate> save(@RequestParam String code,
+                                     @RequestBody StopCoordinate stopCoordinate) {
+        return itineraryService.save(code, stopCoordinate);
     }
 
     @PutMapping
     @ResponseStatus(OK)
-    public List<Coordinate> update(@RequestParam String code,
-                                   @RequestBody Coordinate coordinate) {
-        return itineraryService.update(code, coordinate);
+    public List<StopCoordinate> update(@RequestParam String code,
+                                       @RequestBody StopCoordinate stopCoordinate) {
+        return itineraryService.update(code, stopCoordinate);
     }
 
     @DeleteMapping
     @ResponseStatus(NO_CONTENT)
     public void delete(@RequestParam String code,
-                       @RequestBody Coordinate coordinate) {
-        itineraryService.delete(code, coordinate);
+                       @RequestBody StopCoordinate stopCoordinate) {
+        itineraryService.delete(code, stopCoordinate);
     }
 
 

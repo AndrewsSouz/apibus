@@ -22,5 +22,5 @@ public class Line {
     @JsonProperty("nome")
     private String name;
     @JsonProperty("itinerario")
-    private List<Coordinate> itinerary;
+    private List<StopCoordinate> itinerary;
 }

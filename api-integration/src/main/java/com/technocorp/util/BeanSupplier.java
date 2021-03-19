@@ -8,7 +8,14 @@ import org.springframework.web.client.RestTemplate;
 public class BeanSupplier {
 
     @Bean
-    public RestTemplate restTemplate(){
+    public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public StringBuilder stringBuilder() {
+        return new StringBuilder(
+                "http://api.positionstack.com/v1/forward?access_key=889412e83ce965edbe4cfceae802fd0a&query="
+        );
     }
 }

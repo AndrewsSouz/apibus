@@ -9,7 +9,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Coordinate {
+public class StopCoordinate {
     String lat;
     String lng;
 }
