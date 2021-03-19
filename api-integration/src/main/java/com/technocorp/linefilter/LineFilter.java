@@ -1,6 +1,6 @@
-package com.technocorp.apibus.linefilter;
+package com.technocorp.linefilter;
 
-import com.technocorp.apibus.IntegrationService;
+import com.technocorp.integration.IntegrationService;
 import com.technocorp.persistence.model.Line;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;

@@ -1,9 +1,8 @@
-package com.technocorp.apibus;
+package com.technocorp.integration;
 
-import com.technocorp.apibus.util.Config;
+import com.technocorp.util.Config;
 import com.technocorp.persistence.model.Coordinate;
 import com.technocorp.persistence.model.Line;
-import com.technocorp.persistence.model.LineItinerary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,15 +30,16 @@ public class IntegrationService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_GATEWAY)));
     }
 
-    public LineItinerary callLine(String id) {
+    public Line callLine(String id) {
         var map = restTemplate.getForObject("http://www.poatransporte.com.br/php/facades/process.php?a=il&p=" + id, Map.class);
         Objects.requireNonNull(map);
-        List list = new ArrayList(map.values());  //Can't give a type for the list, the map have
-        return LineItinerary.builder()
+        List list = new ArrayList(map.values());  //Can't give a type for the list, the map have more than one type
+
+        return Line.builder()
                 .id(map.get("idlinha").toString())
                 .code(map.get("codigo").toString())
                 .name(map.get("nome").toString())
-                .coordinates((List<Coordinate>) list.stream()
+                .itinerary((List<Coordinate>) list.stream()
                         .filter(index -> index.toString().contains("lat="))
                         .collect(Collectors.toList()))
                 .build();

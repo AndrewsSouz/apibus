@@ -1,8 +1,10 @@
-package com.technocorp.apibus;
+package com.technocorp;
 
-import com.technocorp.apibus.util.BeanSupplier;
+import com.technocorp.integration.IntegrationService;
+import com.technocorp.util.BeanSupplier;
 import com.technocorp.persistence.model.Line;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {IntegrationService.class, BeanSupplier.class})
+//@Disabled
 class IntegrationServiceTests {
 
     private Line line;

@@ -4,11 +4,15 @@ plugins {
     id 'java'
 }
 
+dependencies {
+    implementation project(':api-controller')
+}
+
 allprojects {
 
-    apply plugin:'org.springframework.boot'
-    apply plugin:'io.spring.dependency-management'
-    apply plugin:'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
 
     group = 'com.technocorp'
     version = '0.0.1-SNAPSHOT'
@@ -38,18 +42,37 @@ allprojects {
 
 }
 
-project(':api-integration'){
+project(':api-integration') {
     dependencies {
         implementation project(':api-persistence')
         implementation 'org.apache.commons:commons-lang3:3.12.0'
     }
-}
-
-project(':api-persistence'){
-    jar{
+    jar {
         enabled = true
     }
-    bootJar{
+    bootJar {
+        enabled = false
+    }
+}
+
+project(':api-controller') {
+    dependencies {
+        implementation project(':api-persistence')
+        implementation project(':api-integration')
+    }
+    jar {
+        enabled = true
+    }
+    bootJar {
+        enabled = false
+    }
+}
+
+project(':api-persistence') {
+    jar {
+        enabled = true
+    }
+    bootJar {
         enabled = false
     }
 }

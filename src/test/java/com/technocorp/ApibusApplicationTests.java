@@ -1,4 +1,4 @@
-package com.technocorp.apibus;
+package com.technocorp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,8 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ApibusApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+
 
 }

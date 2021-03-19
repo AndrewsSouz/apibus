@@ -1,4 +1,4 @@
-package com.technocorp.apibus.util;
+package com.technocorp.util;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
