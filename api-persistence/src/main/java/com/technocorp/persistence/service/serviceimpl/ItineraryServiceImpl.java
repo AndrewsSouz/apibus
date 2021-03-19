@@ -2,6 +2,7 @@ package com.technocorp.persistence.service.serviceimpl;
 
 import com.technocorp.persistence.model.StopCoordinate;
 import com.technocorp.persistence.service.ItineraryService;
+import com.technocorp.persistence.util.Mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class ItineraryServiceImpl implements ItineraryService {
         if (!lineService.existsByCode(code)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NOT_FOUND);
         }
-        var line = lineService.findByCode(code);
+        var line = Mapper.toLine.apply(lineService.findByCode(code));
 
         if (line.getItinerary().isEmpty()) {
             addCoordinateToItinerary(line.getItinerary(), stopCoordinate);
@@ -62,7 +63,7 @@ public class ItineraryServiceImpl implements ItineraryService {
         if (!lineService.existsByCode(code)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NOT_FOUND);
         }
-        var line = lineService.findByCode(code);
+        var line = Mapper.toLine.apply(lineService.findByCode(code));
         line.getItinerary().remove(stopCoordinate);
         lineService.update(line);
     }

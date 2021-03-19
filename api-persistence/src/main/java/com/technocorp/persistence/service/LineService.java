@@ -1,16 +1,17 @@
 package com.technocorp.persistence.service;
 
 import com.technocorp.persistence.model.Line;
+import com.technocorp.persistence.model.dto.LineDTO;
 
 import java.util.List;
 
 public interface LineService {
 
-    List<Line> findAll();
+    List<LineDTO> findAll();
 
-    List<Line> findByName(String name);
+    List<LineDTO> findByName(String name);
 
-    Line findByCode(String code);
+    LineDTO findByCode(String code);
 
     Line save(Line line);
 

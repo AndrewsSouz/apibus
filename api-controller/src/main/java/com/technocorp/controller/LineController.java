@@ -2,6 +2,7 @@ package com.technocorp.controller;
 
 
 import com.technocorp.persistence.model.Line;
+import com.technocorp.persistence.model.dto.LineDTO;
 import com.technocorp.persistence.service.serviceimpl.LineServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -22,8 +23,8 @@ public class LineController {
 
     @GetMapping
     @ResponseStatus(OK)
-    public List<Line> find(@RequestParam(required = false) String name,
-                           @RequestParam(required = false) String code) {
+    public List<LineDTO> find(@RequestParam(required = false) String name,
+                              @RequestParam(required = false) String code) {
         if (StringUtils.hasLength(name) && !StringUtils.hasLength(code)) {
             return lineService.findByName(name);
         } else if (StringUtils.hasLength(code) && !StringUtils.hasLength(name)) {
