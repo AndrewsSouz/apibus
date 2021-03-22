@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/integration")
 @Api("Integration resource")
-@CrossOrigin("http://localhost")
+@CrossOrigin("*")
 public class IntegrationController {
 
     private final IntegrationServiceImpl integrationServiceImpl;
