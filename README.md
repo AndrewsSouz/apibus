@@ -16,12 +16,11 @@ Example request to find all lines
 
 ![image](https://user-images.githubusercontent.com/66229329/112041653-66d1ac00-8b25-11eb-893b-a0301b233ee8.png)
 
--Example query to find a line by code
+Example query to find a line by code
 
-![image](https://user-images.githubusercontent.com/66229329/112041793-8e287900-8b25-11eb-9e45-04fd2f6548ab.png)
+![image](https://user-images.githubusercontent.com/66229329/112042882-cf6d5880-8b26-11eb-8b48-88b804297971.png)
 
-
--Example request to search lines within a radius
+Example request to search lines within a radius
 ![image](https://user-images.githubusercontent.com/66229329/112041259-f1fe7200-8b24-11eb-9fa3-2c16603157b6.png)
 
 
