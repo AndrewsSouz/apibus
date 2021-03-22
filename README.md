@@ -6,11 +6,11 @@ Have one more function to search by address too, missing only an external api to
 
 For store the data was used MongoDb, because is the database i'm have more knowlege and because GeoQueries function too.
 
-Frameworks and apis used:
-SpringBoot
-Spring Web to develop rest api.
-Spring Data MongoDb to interact with database with simple named methods
-For the Api Request was used RestTemplate, is simple to make requests with it.
+Frameworks and apis used:  
+SpringBoot  
+Spring Web to develop rest api.  
+Spring Data MongoDb to interact with database with simple named methods  
+For the Api Request was used RestTemplate, is simple to make requests with it.  
 
 Example request to find all lines
 
