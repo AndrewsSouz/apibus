@@ -56,7 +56,7 @@ public class LineController {
             @ApiParam("The address to be the central point")
             @RequestParam(name = "lng", required = false) Double lng,
             @ApiParam("The distance to be the radius of search")
-            @RequestParam(name = "distance", required = false) Double distance) throws URISyntaxException {
+            @RequestParam(name = "distance", required = false) Double distance){
         if (Objects.isNull(distance)) {
             throw new ResponseStatusException(BAD_REQUEST, "Distance must be setted");
         }
