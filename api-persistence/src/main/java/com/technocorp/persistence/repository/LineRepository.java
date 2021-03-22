@@ -10,6 +10,4 @@ public interface LineRepository extends MongoRepository<Line, String> {
     boolean existsByCodeIgnoreCase(String code);
 
     void deleteByCode(String code);
-
-    Line save(Line line);
 }

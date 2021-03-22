@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("testLines")
+@Document("lines")
 public class LineBson {
     private String id;
     @JsonProperty("codigo")

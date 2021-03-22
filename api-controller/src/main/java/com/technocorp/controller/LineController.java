@@ -52,13 +52,15 @@ public class LineController {
             @ApiResponse(code = 400, message = "If distance are null")})
     public List<LineControllerDTO> findByRange(
             @ApiParam("The address to be the central point")
-            @RequestParam(name = "address", required = false) String address,
+            @RequestParam(name = "lat", required = false) Double lat,
+            @ApiParam("The address to be the central point")
+            @RequestParam(name = "lng", required = false) Double lng,
             @ApiParam("The distance to be the radius of search")
             @RequestParam(name = "distance", required = false) Double distance) throws URISyntaxException {
         if (Objects.isNull(distance)) {
             throw new ResponseStatusException(BAD_REQUEST, "Distance must be setted");
         }
-        return lineService.findLinesByAddressRange(address, distance);
+        return lineService.findLinesByAddressRange(lat,lng, distance);
     }
 
     @PostMapping

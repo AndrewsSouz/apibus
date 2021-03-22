@@ -36,11 +36,10 @@ public class LineServiceImpl implements LineService {
                 lineBsonRepository.findAll());
     }
 
-    public List<LineControllerDTO> findLinesByAddressRange(String address, Double distance) throws URISyntaxException {
-        var coordinates = integrationService.searchAddress(address).getAddressCoordinates();
+    public List<LineControllerDTO> findLinesByAddressRange(double lat, double lng, Double distance) throws URISyntaxException {
+//        var coordinates = integrationService.searchAddress(address).getAddressCoordinates();
         return Mapper.toListLineControllerDTO.apply(lineBsonRepository.findByItineraryNear(
-                new Point(coordinates[0].getGeometry().getCoordinates()[1],
-                        coordinates[0].getGeometry().getCoordinates()[0]),
+                new Point(lat, lng),
                 new Distance(distance, Metrics.KILOMETERS)));
     }
 
@@ -66,7 +65,7 @@ public class LineServiceImpl implements LineService {
             throw new ResponseStatusException(CONFLICT, ALREADY_EXISTS);
         }
 
-                lineRepository.save(Mapper.toLine.apply(line));
+        lineRepository.save(Mapper.toLine.apply(line));
     }
 
     public void update(String code, LineServiceDTO line) {
@@ -76,7 +75,7 @@ public class LineServiceImpl implements LineService {
             throw new ResponseStatusException(BAD_REQUEST, NOT_FOUND);
         }
 
-                lineRepository.save(Mapper.toLine.apply(line));
+        lineRepository.save(Mapper.toLine.apply(line));
     }
 
     public void delete(String code) {

@@ -32,7 +32,7 @@ public class IntegrationServiceImpl {
             .replace("+", "%20");
 
     private static final String TOKEN =
-            "?access_token=pk.eyJ1Ijoic3Rvcm16ZHJ1aWQiLCJhIjoiY2ttanlldXZhMHZ0NTJuczduNjJ5dDE1biJ9.Rb4f1P4z_XkkEad1JZch1Q";
+            "?access_token=pk.eyJ1Ijoic3Rvcm16ZHJ1aWQiLCJhIjoiY2tta2F5cjM1MHplYjJubWk5cjFrMnJ0diJ9.WPKER-px0O-UIwao0-h53Q";
 
     private final RestTemplate restTemplate;
     private final StringBuilder builder;
