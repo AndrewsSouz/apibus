@@ -1,5 +1,4 @@
 rootProject.name = 'apibus'
-include 'api-integration'
 include 'api-persistence'
 include 'api-controller'
 include 'api-service'

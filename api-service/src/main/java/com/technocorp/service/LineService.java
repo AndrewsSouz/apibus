@@ -1,21 +1,21 @@
 package com.technocorp.service;
 
-import com.technocorp.persistence.model.line.Line;
-import com.technocorp.persistence.model.dto.LineDTO;
+import com.technocorp.persistence.model.dto.LineControllerDTO;
+import com.technocorp.persistence.model.dto.LineServiceDTO;
 
 import java.util.List;
 
 public interface LineService {
 
-    List<LineDTO> findAll();
+    List<LineControllerDTO> findAll();
 
-    List<LineDTO> findByName(String name);
+    List<LineControllerDTO> findByName(String name);
 
-    LineDTO findByCode(String code);
+    LineControllerDTO findByCode(String code);
 
-    Line save(Line line);
+    void save(LineServiceDTO line);
 
-    Line update(String id, Line line);
+    void update(String id, LineServiceDTO line);
 
     void delete(String id);
 

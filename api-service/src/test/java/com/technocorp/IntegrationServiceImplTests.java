@@ -4,7 +4,7 @@ import com.technocorp.persistence.model.line.Line;
 import com.technocorp.persistence.repository.LineRepository;
 import com.technocorp.service.serviceimpl.IntegrationServiceImpl;
 import com.technocorp.service.serviceimpl.LineServiceImpl;
-import com.technocorp.util.BeanSupplier;
+import com.technocorp.service.util.BeanSupplier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         BeanSupplier.class,
         LineServiceImpl.class,
         })
-//@Disabled
+@Disabled
 class IntegrationServiceImplTests {
 
     private Line line;
@@ -58,7 +59,7 @@ class IntegrationServiceImplTests {
         assertEquals("",response);
     }
     @Test
-    void shouldReturnAnAddressCoordinate() throws UnsupportedEncodingException {
+    void shouldReturnAnAddressCoordinate() throws UnsupportedEncodingException, URISyntaxException {
         var response = integrationServiceImpl.searchAddress("rua mali");
         System.out.println(response);
         assertEquals("",response);

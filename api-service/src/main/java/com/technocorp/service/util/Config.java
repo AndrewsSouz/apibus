@@ -1,4 +1,4 @@
-package com.technocorp.util;
+package com.technocorp.service.util;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;

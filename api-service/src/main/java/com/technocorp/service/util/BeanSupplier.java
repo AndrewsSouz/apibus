@@ -1,4 +1,4 @@
-package com.technocorp.util;
+package com.technocorp.service.util;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ public class BeanSupplier {
     @Bean
     public StringBuilder stringBuilder() {
         return new StringBuilder(
-                "http://api.positionstack.com/v1/forward?access_key=889412e83ce965edbe4cfceae802fd0a&query="
+                "https://api.mapbox.com/geocoding/v5/mapbox.places/"
         );
     }
 }

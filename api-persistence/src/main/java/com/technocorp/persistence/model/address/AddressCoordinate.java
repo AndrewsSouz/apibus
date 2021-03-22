@@ -8,6 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressCoordinate {
-    String latitude;
-    String longitude;
+    private LatLng geometry;
 }

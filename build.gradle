@@ -6,6 +6,9 @@ plugins {
 
 dependencies {
     implementation project(':api-controller')
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
 }
 
 allprojects {
@@ -42,23 +45,12 @@ allprojects {
 
 }
 
-project(':api-integration') {
-    dependencies {
-        implementation project(':api-persistence')
-    }
-    jar {
-        enabled = true
-    }
-    bootJar {
-        enabled = false
-    }
-}
-
 project(':api-controller') {
     dependencies {
         implementation project(':api-persistence')
-        implementation project(':api-integration')
         implementation project(':api-service')
+        implementation 'io.springfox:springfox-swagger2:2.9.2'
+        implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     }
     jar {
         enabled = true
@@ -71,7 +63,6 @@ project(':api-controller') {
 project(':api-service') {
     dependencies{
         implementation project(':api-persistence')
-        implementation project(':api-integration')
         implementation 'org.apache.commons:commons-lang3:3.12.0'
     }
     jar {

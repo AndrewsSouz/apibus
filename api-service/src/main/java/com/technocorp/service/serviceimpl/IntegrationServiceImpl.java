@@ -1,100 +1,114 @@
 package com.technocorp.service.serviceimpl;
 
 import com.technocorp.persistence.model.address.AddressCoordinateWrapper;
-import com.technocorp.persistence.model.dto.LineDTO;
 import com.technocorp.persistence.model.line.Line;
-import com.technocorp.persistence.model.line.Coordinate;
-import com.technocorp.util.Config;
-import org.apache.commons.lang3.StringUtils;
+import com.technocorp.persistence.repository.LineRepository;
+import com.technocorp.service.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.geo.GeoJsonMultiPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.Thread.sleep;
+
 
 @Service
 public class IntegrationServiceImpl {
 
+    private static final String ALL_LINES = "http://www.poatransporte.com.br/php/facades/process.php?a=nc&p=%&t=o";
+    private static final String LINE = "http://www.poatransporte.com.br/php/facades/process.php?a=il&p=";
+
+    private static final String CITY = URLEncoder.encode(", Porto Alegre, RS, Brasil", StandardCharsets.UTF_8)
+            .replace("+", "%20");
+
+    private static final String TOKEN =
+            "?access_token=pk.eyJ1Ijoic3Rvcm16ZHJ1aWQiLCJhIjoiY2ttanlldXZhMHZ0NTJuczduNjJ5dDE1biJ9.Rb4f1P4z_XkkEad1JZch1Q";
+
     private final RestTemplate restTemplate;
     private final StringBuilder builder;
-    private final LineServiceImpl lineService;
+    private final LineRepository lineRepository;
 
 
     @Autowired
-    public IntegrationServiceImpl(RestTemplate restTemplate, StringBuilder builder, LineServiceImpl lineService) {
+    public IntegrationServiceImpl(RestTemplate restTemplate,
+                                  StringBuilder builder,
+                                  LineRepository lineRepository) {
         this.restTemplate = restTemplate;
+        this.lineRepository = lineRepository;
         this.builder = builder;
-        this.lineService = lineService;
         this.restTemplate.setMessageConverters(Config.messageConverter.get());
-    }
-
-
-    public List<LineDTO> findLinesByAddressRange(String address, Distance distance) throws UnsupportedEncodingException {
-        var coordinates = searchAddress(address).getAddressCoordinates();
-        return lineService.findInCoordinateInRadius(coordinates[0],distance);
     }
 
     public void saveAllLines() {
         var allLines = callAllLines();
         Objects.requireNonNull(allLines);
-        allLines.forEach(
-                line -> lineService.save(callLine(line.getId()))
-        );
+        allLines.stream()
+                .filter(line -> !lineRepository.existsByCodeIgnoreCase(line.getCode()))
+                .forEach(
+                        line -> {
+                                lineRepository.save(callLine(line.getId()));
+                            try {
+                                sleep(60);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                );
     }
 
 
     public List<Line> callAllLines() {
         return Arrays.asList(Optional.ofNullable(
-                restTemplate.getForObject("http://www.poatransporte.com.br/php/facades/process.php?a=nc&p=%&t=o", Line[].class))
+                restTemplate.getForObject(ALL_LINES, Line[].class))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_GATEWAY)));
     }
 
     public Line callLine(String id) {
-        var map = restTemplate.getForObject("http://www.poatransporte.com.br/php/facades/process.php?a=il&p=" + id, Map.class);
+        var map = restTemplate.getForObject(LINE + id, Map.class);
         Objects.requireNonNull(map);
-        List list = new ArrayList(map.values());  //Can't give a type for the list, the map have more than one type
 
-        return Line.builder()
+        List<LinkedHashMap<String, String>> list =
+                (ArrayList<LinkedHashMap<String, String>>)
+                        map.values().stream()
+                                .filter(index -> index.toString().contains("lat"))
+                                .collect(Collectors.toList());
+
+        GeoJsonMultiPoint points = new GeoJsonMultiPoint(list.stream()
+                .map(point -> (new Point(
+                        Double.parseDouble(point.get("lat")),
+                        Double.parseDouble(point.get("lng"))
+                ))).collect(Collectors.toList()));
+
+        var save = Line.builder()
                 .id(map.get("idlinha").toString())
                 .code(map.get("codigo").toString())
                 .name(map.get("nome").toString())
-                .itinerary((List<Coordinate>) list.stream()
-                        .filter(index -> index.toString().contains("lat="))
-                        .collect(Collectors.toList()))
+                .itinerary(points)
                 .build();
+        System.out.println(save);
+        return save;
     }
 
-    public AddressCoordinateWrapper searchAddress(String address) throws UnsupportedEncodingException {
-        builder.append(URLEncoder.encode(address, StandardCharsets.UTF_8.toString())
+    public AddressCoordinateWrapper searchAddress(String address) throws URISyntaxException {
+        builder.append(URLEncoder.encode(address, StandardCharsets.UTF_8)
                 .replace("+", "%20"));
-        builder.append(URLEncoder.encode(", Porto Alegre, RS, Brasil", StandardCharsets.UTF_8.toString())
-                .replace("+", "%20"));
-        var uri = URI.create(builder.toString());
+        builder.append(CITY);
+        builder.append(".json");
+        builder.append(TOKEN);
+
+        URI requestUri = new URI(builder.toString());
         return restTemplate.getForObject(
-                uri, AddressCoordinateWrapper.class);
-    }
-
-    public List<Line> findLineByName(String name) {
-        return callAllLines()
-                .stream()
-                .filter(line -> StringUtils.containsIgnoreCase(line.getName(), name))
-                .collect(Collectors.toList());
-    }
-
-    public List<Line> findLineByPrefix(String prefix) {
-        return callAllLines()
-                .stream()
-                .filter(line -> StringUtils.containsIgnoreCase(line.getCode(), prefix))
-                .collect(Collectors.toList());
+                requestUri, AddressCoordinateWrapper.class);
     }
 
 }

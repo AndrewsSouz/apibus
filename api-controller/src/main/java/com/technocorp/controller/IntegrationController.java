@@ -1,22 +1,26 @@
 package com.technocorp.controller;
 
 import com.technocorp.service.serviceimpl.IntegrationServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/integration")
+@Api("Integration resource")
+@CrossOrigin("http://localhost")
 public class IntegrationController {
 
     private final IntegrationServiceImpl integrationServiceImpl;
 
     @GetMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Start the function to copy all data from procempa api public endpoint to database")
+    @ApiResponse(code = 200,message = "Return 200 when whole data has copied")
     public void integrateData() {
         integrationServiceImpl.saveAllLines();
     }

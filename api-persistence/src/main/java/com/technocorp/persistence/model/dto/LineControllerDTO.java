@@ -1,19 +1,20 @@
 package com.technocorp.persistence.model.dto;
 
-import com.technocorp.persistence.model.line.Coordinate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.Document;
+import org.springframework.data.mongodb.core.geo.GeoJsonMultiPoint;
 
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LineDTO {
+public class LineControllerDTO {
     private String code;
     private String name;
-    private List<Coordinate> itinerary;
+    private Document docItinerary;
+    private GeoJsonMultiPoint geoItinerary;
 }
