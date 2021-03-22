@@ -5,6 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * Model to retrieve coordinates from an external api *
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

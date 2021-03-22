@@ -20,25 +20,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.technocorp.service.util.StringMessages.UNEXPECTED_ERROR;
+import static com.technocorp.service.util.UriStrings.*;
 import static java.lang.Thread.sleep;
 
 
 @Service
 public class IntegrationServiceImpl {
 
-    private static final String ALL_LINES = "http://www.poatransporte.com.br/php/facades/process.php?a=nc&p=%&t=o";
-    private static final String LINE = "http://www.poatransporte.com.br/php/facades/process.php?a=il&p=";
 
-    private static final String CITY = URLEncoder.encode(", Porto Alegre, RS, Brasil", StandardCharsets.UTF_8)
-            .replace("+", "%20");
-
-    private static final String TOKEN =
-            "?access_token=pk.eyJ1Ijoic3Rvcm16ZHJ1aWQiLCJhIjoiY2tta2F5cjM1MHplYjJubWk5cjFrMnJ0diJ9.WPKER-px0O-UIwao0-h53Q";
 
     private final RestTemplate restTemplate;
     private final StringBuilder builder;
     private final LineRepository lineRepository;
-
 
     @Autowired
     public IntegrationServiceImpl(RestTemplate restTemplate,
@@ -50,6 +43,10 @@ public class IntegrationServiceImpl {
         this.restTemplate.setMessageConverters(Config.messageConverter.get());
     }
 
+    /**
+     * Retrieve all bus lines from the
+     * external api and store on database
+      */
     public void saveAllLines() {
         var allLines = callAllLines();
         allLines.stream()
@@ -67,13 +64,22 @@ public class IntegrationServiceImpl {
     }
 
 
-    public List<Line> callAllLines() {
+    /**
+     * Request all bus lines for the endpoint
+     * @return A list of all lines without id
+     */
+    private List<Line> callAllLines() {
         return Arrays.asList(Optional.ofNullable(
                 restTemplate.getForObject(ALL_LINES, Line[].class))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_GATEWAY,UNEXPECTED_ERROR)));
     }
 
-    public Line callLine(String id) {
+    /**
+     * Build the line object to be stored
+     * @param id Comes from saveAllLines()
+     * @return The line built with itinerary
+     */
+    private Line callLine(String id) {
         var map = restTemplate.getForObject(LINE + id, Map.class);
         Objects.requireNonNull(map);
 
@@ -97,6 +103,14 @@ public class IntegrationServiceImpl {
                 .build();
     }
 
+    /**
+     * Method used to search by address,
+     * retrieve a coordinate from an external api
+     * to pass for findLinesByAddressRange()
+     * @param address The given address to retrieve the coordinates
+     * @return Nested Object with coordinates
+     * @throws URISyntaxException If an error happen when construct the URI
+     */
     public AddressCoordinateWrapper searchAddress(String address) throws URISyntaxException {
         builder.append(URLEncoder.encode(address, StandardCharsets.UTF_8)
                 .replace("+", "%20"));

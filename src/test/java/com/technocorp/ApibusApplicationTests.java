@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.geo.GeoJsonMultiPoint;
 import org.springframework.http.HttpStatus;
@@ -70,6 +72,20 @@ class ApibusApplicationTests {
                 ResponseStatusException.class,
                 () -> lineController.find("null", "null"));
         assertEquals(HttpStatus.BAD_REQUEST, thrown.getStatus());
+    }
+
+    @Test
+    void shouldReturnAListOfLinesWhenFindByRange() {
+        this.line.setItinerary(null);
+        when(lineBsonRepository.findByItineraryNear(
+                new Point(-30.1213, -51.1312),
+                new Distance(1, Metrics.KILOMETERS)))
+                .thenReturn(Collections.singletonList(this.line));
+        var stubActual = lineController.findByRange(
+                -30.1213, -51.1312, 1.0);
+        var stubExpected =
+                Collections.singletonList(Mapper.toLineControllerDTO.apply(this.line));
+        assertEquals(stubExpected, stubActual);
     }
 
 
