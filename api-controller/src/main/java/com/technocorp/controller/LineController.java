@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;

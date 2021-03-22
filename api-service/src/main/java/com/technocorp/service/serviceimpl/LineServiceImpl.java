@@ -28,14 +28,15 @@ public class LineServiceImpl implements LineService {
 
     private final LineRepository lineRepository;
     private final LineBsonRepository lineBsonRepository;
-    private final IntegrationServiceImpl integrationService;
 
     public List<LineControllerDTO> findAll() {
         return Mapper.toListLineControllerDTO.apply(
                 lineBsonRepository.findAll());
     }
 
-    public List<LineControllerDTO> findLinesByAddressRange(double lat, double lng, Double distance) {
+    public List<LineControllerDTO> findLinesByAddressRange(
+            double lat, double lng, Double distance) {
+
         return Mapper.toListLineControllerDTO.apply(lineBsonRepository.findByItineraryNear(
                 new Point(lat, lng),
                 new Distance(distance, Metrics.KILOMETERS)));
