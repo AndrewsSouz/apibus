@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.technocorp.service.util.StringMessages.UNEXPECTED_ERROR;
 import static java.lang.Thread.sleep;
 
 
@@ -51,7 +52,6 @@ public class IntegrationServiceImpl {
 
     public void saveAllLines() {
         var allLines = callAllLines();
-        Objects.requireNonNull(allLines);
         allLines.stream()
                 .filter(line -> !lineRepository.existsByCodeIgnoreCase(line.getCode()))
                 .forEach(
@@ -70,7 +70,7 @@ public class IntegrationServiceImpl {
     public List<Line> callAllLines() {
         return Arrays.asList(Optional.ofNullable(
                 restTemplate.getForObject(ALL_LINES, Line[].class))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_GATEWAY)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_GATEWAY,UNEXPECTED_ERROR)));
     }
 
     public Line callLine(String id) {
@@ -89,14 +89,12 @@ public class IntegrationServiceImpl {
                         Double.parseDouble(point.get("lng"))
                 ))).collect(Collectors.toList()));
 
-        var save = Line.builder()
+        return Line.builder()
                 .id(map.get("idlinha").toString())
                 .code(map.get("codigo").toString())
                 .name(map.get("nome").toString())
                 .itinerary(points)
                 .build();
-        System.out.println(save);
-        return save;
     }
 
     public AddressCoordinateWrapper searchAddress(String address) throws URISyntaxException {

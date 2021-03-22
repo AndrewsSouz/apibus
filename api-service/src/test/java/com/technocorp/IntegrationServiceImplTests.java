@@ -1,68 +1,57 @@
 package com.technocorp;
 
 import com.technocorp.persistence.model.line.Line;
-import com.technocorp.persistence.repository.LineRepository;
 import com.technocorp.service.serviceimpl.IntegrationServiceImpl;
-import com.technocorp.service.serviceimpl.LineServiceImpl;
-import com.technocorp.service.util.BeanSupplier;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.geo.GeoJsonMultiPoint;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {
-        IntegrationServiceImpl.class,
-        BeanSupplier.class,
-        LineServiceImpl.class,
-        })
-@Disabled
+@ExtendWith(MockitoExtension.class)
 class IntegrationServiceImplTests {
 
     private Line line;
+    private Line[] lineArray;
+    private final String ALL_LINES_URI = "http://www.poatransporte.com.br/php/facades/process.php?a=nc&p=%&t=o";
 
-    @Autowired
-    private IntegrationServiceImpl integrationServiceImpl;
+    @Mock
+    RestTemplate restTemplate;
 
-    @MockBean
-    LineRepository lineRepository;
+    @InjectMocks
+    IntegrationServiceImpl integrationService;
 
     @BeforeEach
     void setUp() {
         this.line = Line.builder()
-                .id("5517")
-                .code("250-1")
-                .name("1 DE MAIO")
+                .id("1")
+                .code("637-1")
+                .name("Chacara das Pedras")
+                .itinerary(new GeoJsonMultiPoint(
+                        List.of(new Point(-30.1213, -51.1312),
+                                new Point(-30.4567, -52.6789))))
                 .build();
+        lineArray = new Line[]{this.line};
     }
+
 
     @Test
     void shouldReturnAListOfLines() {
-        var response = this.integrationServiceImpl.callAllLines();
-        System.out.println(response);
-        assertEquals(line, response.get(0));
+        when(restTemplate.getForObject(ALL_LINES_URI, Line[].class))
+                .thenReturn(lineArray);
+        var stubActual = integrationService.callAllLines();
+        assertEquals(this.line, stubActual.get(0));
     }
 
-    @Test
-    void shouldReturnALine(){
-        var response = integrationServiceImpl.callLine("5472");
-        System.out.println(response);
-        assertEquals("",response);
-    }
-    @Test
-    void shouldReturnAnAddressCoordinate() throws UnsupportedEncodingException, URISyntaxException {
-        var response = integrationServiceImpl.searchAddress("rua mali");
-        System.out.println(response);
-        assertEquals("",response);
-    }
+
 
 }

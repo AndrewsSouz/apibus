@@ -11,4 +11,5 @@ public interface LineBsonRepository extends MongoRepository<LineBson,String> {
     List<LineBson> findByItineraryNear(Point point, Distance distance);
     List<LineBson> findByNameIgnoreCaseContaining(String name);
     LineBson findByCodeIgnoreCase(String code);
+    boolean existsByCodeIgnoreCase(String code);
 }

@@ -36,7 +36,9 @@ allprojects {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
     }
 
     test {
@@ -61,7 +63,7 @@ project(':api-controller') {
 }
 
 project(':api-service') {
-    dependencies{
+    dependencies {
         implementation project(':api-persistence')
         implementation 'org.apache.commons:commons-lang3:3.12.0'
     }
