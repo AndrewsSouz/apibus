@@ -2,7 +2,6 @@ package com.technocorp.service;
 
 import com.technocorp.persistence.model.dto.LineControllerDTO;
 import com.technocorp.persistence.model.dto.LineServiceDTO;
-import com.technocorp.persistence.model.line.LineBson;
 
 import java.util.List;
 

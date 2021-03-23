@@ -37,9 +37,9 @@ public class IntegrationServiceImpl {
     public IntegrationServiceImpl(RestTemplate restTemplate,
                                   StringBuilder builder,
                                   LineRepository lineRepository) {
-        this.restTemplate = restTemplate;
         this.lineRepository = lineRepository;
         this.builder = builder;
+        this.restTemplate = restTemplate;
         this.restTemplate.setMessageConverters(Config.messageConverter.get());
     }
 
@@ -58,6 +58,7 @@ public class IntegrationServiceImpl {
                                 sleep(60);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
+                                Thread.currentThread().interrupt();
                             }
                         }
                 );
@@ -66,7 +67,7 @@ public class IntegrationServiceImpl {
 
     /**
      * Request all bus lines for the endpoint
-     * @return A list of all lines without id
+     * @return A list of all lines without itinerary
      */
     private List<Line> callAllLines() {
         return Arrays.asList(Optional.ofNullable(

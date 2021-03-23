@@ -58,20 +58,6 @@ public class LineServiceImpl implements LineService {
                 new Distance(distance, Metrics.KILOMETERS)));
     }
 
-    private List<LineBson> findAll() {
-        return lineBsonRepository.findAll();
-    }
-
-    private List<LineBson> findByName(String name) {
-        Objects.requireNonNull(name, NULL_CODE_MSG);
-        return lineBsonRepository.findByNameIgnoreCaseContaining(name);
-    }
-
-    private LineBson findByCode(String code) {
-        Objects.requireNonNull(code, NULL_CODE_MSG);
-        return lineBsonRepository.findByCodeIgnoreCase(code);
-    }
-
     public void save(LineServiceDTO line) {
         Objects.requireNonNull(line);
         if (lineRepository.existsByCodeIgnoreCase(line.getCode()) &&
@@ -96,6 +82,20 @@ public class LineServiceImpl implements LineService {
     public void delete(String code) {
         Objects.requireNonNull(code, NULL_CODE_MSG);
         lineRepository.deleteByCode(code);
+    }
+
+    private List<LineBson> findAll() {
+        return lineBsonRepository.findAll();
+    }
+
+    private List<LineBson> findByName(String name) {
+        Objects.requireNonNull(name, NULL_CODE_MSG);
+        return lineBsonRepository.findByNameIgnoreCaseContaining(name);
+    }
+
+    private LineBson findByCode(String code) {
+        Objects.requireNonNull(code, NULL_CODE_MSG);
+        return lineBsonRepository.findByCodeIgnoreCase(code);
     }
 
 }

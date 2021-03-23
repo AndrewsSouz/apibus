@@ -64,7 +64,4 @@ public class Mapper {
                     .build())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, UNEXPECTED_ERROR));
 
-
-
-
 }

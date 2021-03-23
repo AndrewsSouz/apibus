@@ -9,6 +9,4 @@ public class StringMessages {
     public static final String NOT_FOUND = "Resource not Found";
     public static final String ALREADY_EXISTS = "Resource already exists";
     public static final String UNEXPECTED_ERROR = "An unexpected error ocurred";
-
-
 }

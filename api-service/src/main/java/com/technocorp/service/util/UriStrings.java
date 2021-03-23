@@ -5,6 +5,9 @@ import java.nio.charset.StandardCharsets;
 
 public class UriStrings {
 
+    private UriStrings(){
+    }
+
     public static final String ALL_LINES = "http://www.poatransporte.com.br/php/facades/process.php?a=nc&p=%&t=o";
     public static final String LINE = "http://www.poatransporte.com.br/php/facades/process.php?a=il&p=";
     public static final String CITY = URLEncoder.encode(", Porto Alegre, RS, Brasil", StandardCharsets.UTF_8)
