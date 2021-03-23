@@ -60,7 +60,7 @@ class LineServiceTests {
     @Test
     void shouldReturnAListOfLines() {
         when(lineBsonRepository.findAll()).thenReturn(Collections.singletonList(this.line));
-        var stubActual = lineService.findAll();
+        var stubActual = lineService.find(null,null);
         var stubExpected =
                 Mapper.toListLineControllerDTO.apply(Collections.singletonList(this.line));
         assertEquals(stubExpected, stubActual);
@@ -70,7 +70,7 @@ class LineServiceTests {
     void shouldReturnALineWhenFindByName() {
         when(lineBsonRepository.findByNameIgnoreCaseContaining(this.line.getName()))
                 .thenReturn(Collections.singletonList(this.line));
-        var stubActual = lineService.findByName(this.line.getName());
+        var stubActual = lineService.find(this.line.getName(),null);
         var stubExpected =Collections.singletonList(this.lineControllerDTO);
         assertEquals(stubExpected, stubActual);
     }
@@ -80,7 +80,7 @@ class LineServiceTests {
     void shouldReturnALineWhenFindByCode() {
         when(lineBsonRepository.findByCodeIgnoreCase(this.line.getCode()))
                 .thenReturn(this.line);
-        var stubActual = lineService.findByCode(this.line.getCode());
+        var stubActual = lineService.find(null,this.line.getCode());
         var stubExpected =
                 Mapper.toLineControllerDTO.apply(this.line);
         assertEquals(stubExpected, stubActual);

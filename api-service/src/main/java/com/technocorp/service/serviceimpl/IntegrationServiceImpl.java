@@ -95,6 +95,8 @@ public class IntegrationServiceImpl {
                         Double.parseDouble(point.get("lng"))
                 ))).collect(Collectors.toList()));
 
+        System.out.println(map.get("nome"));
+
         return Line.builder()
                 .id(map.get("idlinha").toString())
                 .code(map.get("codigo").toString())

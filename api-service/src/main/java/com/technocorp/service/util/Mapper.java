@@ -28,7 +28,7 @@ public class Mapper {
                             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, UNEXPECTED_ERROR))
                     ).collect(Collectors.toList());
 
-    public static final Function<List<LineBson>, List<LineControllerDTO>> toListLineControllerDtoWithItinerary =
+    public static final Function<List<LineBson>, List<LineControllerDTO>> toListControlDtoWithItinerary =
             lineBson -> lineBson.stream()
                     .map(line -> Optional.ofNullable(LineControllerDTO.builder()
                             .name(line.getName())

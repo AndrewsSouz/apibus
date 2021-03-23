@@ -34,14 +34,7 @@ public class LineController {
                                         @RequestParam(required = false) String name,
                                         @ApiParam("The code of line te find, return a single line")
                                         @RequestParam(required = false) String code) {
-        if (StringUtils.hasLength(name) && !StringUtils.hasLength(code)) {
-            return lineService.findByName(name);
-        } else if (StringUtils.hasLength(code) && !StringUtils.hasLength(name)) {
-            return Collections.singletonList(lineService.findByCode(code));
-        } else if (StringUtils.hasLength(name) && StringUtils.hasLength(code)) {
-            throw new ResponseStatusException(BAD_REQUEST, "Must provide only one search parameter");
-        }
-        return lineService.findAll();
+        return lineService.find(name, code);
     }
 
     @GetMapping("/search")
@@ -55,11 +48,8 @@ public class LineController {
             @ApiParam("The address to be the central point")
             @RequestParam(name = "lng", required = false) Double lng,
             @ApiParam("The distance to be the radius of search")
-            @RequestParam(name = "distance", required = false) Double distance){
-        if (Objects.isNull(distance)) {
-            throw new ResponseStatusException(BAD_REQUEST, "Distance must be setted");
-        }
-        return lineService.findLinesByAddressRange(lat,lng, distance);
+            @RequestParam(name = "distance", required = false) Double distance) {
+        return lineService.findLinesByAddressRange(lat, lng, distance);
     }
 
     @PostMapping
