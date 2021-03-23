@@ -6,15 +6,12 @@ import com.technocorp.service.serviceimpl.LineServiceImpl;
 import com.technocorp.service.util.Mapper;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @AllArgsConstructor
