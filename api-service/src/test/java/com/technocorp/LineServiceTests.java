@@ -1,11 +1,8 @@
 package com.technocorp;
 
 import com.technocorp.persistence.model.dto.LineControllerDTO;
-import com.technocorp.persistence.model.line.Line;
 import com.technocorp.persistence.model.line.LineBson;
 import com.technocorp.persistence.repository.LineBsonRepository;
-import com.technocorp.persistence.repository.LineRepository;
-import com.technocorp.service.LineService;
 import com.technocorp.service.serviceimpl.LineServiceImpl;
 import com.technocorp.service.util.Mapper;
 import org.bson.Document;
@@ -78,8 +75,8 @@ class LineServiceTests {
 
     @Test
     void shouldReturnALineWhenFindByCode() {
-        when(lineBsonRepository.findByCodeIgnoreCase(this.line.getCode()))
-                .thenReturn(this.line);
+        when(lineBsonRepository.findByCodeIgnoreCaseContaining(this.line.getCode()))
+                .thenReturn(Collections.singletonList(this.line));
         var stubActual = lineService.find(null,this.line.getCode());
         var stubExpected =
                 Mapper.toLineControllerDTO.apply(this.line);
@@ -90,7 +87,8 @@ class LineServiceTests {
     @Disabled("NullPointer")
     void shouldSaveALine() {
         when(lineBsonRepository.existsByCodeIgnoreCase(line.getCode())).thenReturn(true);
-        when(lineBsonRepository.findByCodeIgnoreCase(line.getCode())).thenReturn(this.line);
+        when(lineBsonRepository.findByCodeIgnoreCaseContaining(line.getCode()))
+                .thenReturn(Collections.singletonList(this.line));
         lineService.save(Mapper.toLineServiceDTO.apply(
                 Mapper.toLineControllerDTO.apply(this.line)));
         verify(lineBsonRepository, times(1)).save(this.line);
@@ -100,7 +98,8 @@ class LineServiceTests {
     @Disabled("NullPointer")
     void shouldUpdateALine() {
         when(lineBsonRepository.existsByCodeIgnoreCase(line.getCode())).thenReturn(true);
-        when(lineBsonRepository.findByCodeIgnoreCase(line.getCode())).thenReturn(this.line);
+        when(lineBsonRepository.findByCodeIgnoreCaseContaining(line.getCode()))
+                .thenReturn(Collections.singletonList(this.line));
         lineService.update(this.line.getCode(), Mapper.toLineServiceDTO.apply(
                 Mapper.toLineControllerDTO.apply(this.line)));
         verify(lineBsonRepository, times(1)).save(this.line);

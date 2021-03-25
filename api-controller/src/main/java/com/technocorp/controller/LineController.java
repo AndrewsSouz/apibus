@@ -65,8 +65,8 @@ public class LineController {
     @ApiResponses(value = {@ApiResponse(code = 200, message = "If the operation succeed"),
             @ApiResponse(code = 409, message = "When the given object already exist on database"),
             @ApiResponse(code = 400, message = "When the given object is null")})
-    public void update(String id, LineControllerDTO line) {
-        lineService.update(id,
+    public void update(@RequestParam String code, LineControllerDTO line) {
+        lineService.update(code,
                 Mapper.toLineServiceDTO.apply(line));
     }
 

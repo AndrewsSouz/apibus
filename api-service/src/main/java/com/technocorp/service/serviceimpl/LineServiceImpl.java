@@ -36,10 +36,9 @@ public class LineServiceImpl implements LineService {
     public List<LineControllerDTO> find(String name, String code) {
         if (nonNull(name) && nonNull(code)) {
             throw new ResponseStatusException(BAD_REQUEST, "Must pass only one param");
-        }else if (isNull(name) && isNull(code)){
+        } else if (isNull(name) && isNull(code)) {
             return Mapper.toListLineControllerDTO.apply(findAll());
-        }
-        else if (isNull(code)) {
+        } else if (isNull(code)) {
             return Mapper.toListLineControllerDTO
                     .apply(findByName(name));
         } else {

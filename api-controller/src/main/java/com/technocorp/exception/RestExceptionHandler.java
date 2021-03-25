@@ -37,7 +37,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
-    public StandardError handleGeneralExceptions(Exception e) {
+    public StandardError handleGeneralException(Exception e) {
         return StandardError.builder()
                 .status(INTERNAL_SERVER_ERROR.value())
                 .message(e.getMessage())
@@ -47,19 +47,28 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
-    public StandardError handleRuntimeExceptions(RuntimeException e) {
+    public StandardError handleRuntimeException(Exception e) {
         return StandardError.builder()
                 .status(INTERNAL_SERVER_ERROR.value())
-                .message("Unexpected Error!")
+                .message(e.getMessage())
                 .build();
     }
 
     @ExceptionHandler(IOException.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
-    public StandardError handleIoExceptionExceptions(IOException e) {
+    public StandardError handleIoException() {
         return StandardError.builder()
                 .status(INTERNAL_SERVER_ERROR.value())
                 .message("Input/Output error")
+                .build();
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    public StandardError handleNullPointerException() {
+        return StandardError.builder()
+                .status(INTERNAL_SERVER_ERROR.value())
+                .message("Null")
                 .build();
     }
 }

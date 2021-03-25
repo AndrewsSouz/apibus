@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.technocorp.service.util.StringMessages.UNEXPECTED_ERROR;
+import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 
 public class Mapper {
 
@@ -25,19 +26,9 @@ public class Mapper {
                             .name(line.getName())
                             .code(line.getCode())
                             .build())
-                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, UNEXPECTED_ERROR))
+                            .orElseThrow(() -> new ResponseStatusException(
+                                    BAD_GATEWAY, UNEXPECTED_ERROR))
                     ).collect(Collectors.toList());
-
-    public static final Function<List<LineBson>, List<LineControllerDTO>> toListControlDtoWithItinerary =
-            lineBson -> lineBson.stream()
-                    .map(line -> Optional.ofNullable(LineControllerDTO.builder()
-                            .name(line.getName())
-                            .code(line.getCode())
-                            .docItinerary(line.getItinerary())
-                            .build())
-                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, UNEXPECTED_ERROR))
-                    ).collect(Collectors.toList());
-
 
     public static final Function<LineBson, LineControllerDTO> toLineControllerDTO =
             line -> Optional.ofNullable(LineControllerDTO.builder()
@@ -45,7 +36,8 @@ public class Mapper {
                     .code(line.getCode())
                     .docItinerary(line.getItinerary())
                     .build())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, UNEXPECTED_ERROR));
+                    .orElseThrow(() -> new ResponseStatusException(
+                            BAD_GATEWAY, UNEXPECTED_ERROR));
 
     public static final Function<LineControllerDTO, LineServiceDTO> toLineServiceDTO =
             line -> Optional.ofNullable(LineServiceDTO.builder()
@@ -53,7 +45,8 @@ public class Mapper {
                     .code(line.getCode())
                     .itinerary(line.getGeoItinerary())
                     .build())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, UNEXPECTED_ERROR));
+                    .orElseThrow(() -> new ResponseStatusException(
+                            BAD_GATEWAY, UNEXPECTED_ERROR));
 
 
     public static final Function<LineServiceDTO, Line> toLine =
@@ -62,6 +55,7 @@ public class Mapper {
                     .code(lineServiceDTO.getCode())
                     .itinerary(lineServiceDTO.getItinerary())
                     .build())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, UNEXPECTED_ERROR));
+                    .orElseThrow(() -> new ResponseStatusException(
+                            BAD_GATEWAY, UNEXPECTED_ERROR));
 
 }
