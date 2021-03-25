@@ -1,6 +1,6 @@
 package com.technocorp.controller;
 
-import com.technocorp.service.serviceimpl.IntegrationServiceImpl;
+import com.technocorp.service.serviceimpl.IntegrationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class IntegrationController {
 
-    private final IntegrationServiceImpl integrationServiceImpl;
+    private final IntegrationService integrationService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Start the function to copy all data from procempa api public endpoint to database")
     @ApiResponse(code = 200,message = "Return 200 when whole data has copied")
     public void integrateData() {
-        integrationServiceImpl.saveAllLines();
+        integrationService.saveAllLines();
     }
 
 

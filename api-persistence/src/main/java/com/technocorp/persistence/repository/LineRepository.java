@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LineRepository extends MongoRepository<Line, String> {
 
-    Line findByCodeIgnoreCase(String code);
 
     boolean existsByCodeIgnoreCase(String code);
 

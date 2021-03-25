@@ -2,14 +2,56 @@ plugins {
     id 'org.springframework.boot' version '2.4.3'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'jacoco'
+    id "org.sonarqube" version "3.0"
 }
 
 dependencies {
     implementation project(':api-controller')
     implementation project(':api-service')
     implementation project(':api-persistence')
+}
 
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'http://localhost:9000'
+        property 'sonar.login', 'admin'
+        property 'sonar.password', '260117'
+        property 'sonar.coverage.exclusions', [
+                'src/main/java/com/technocorp/config/SwaggerConfig.java',
+                'src/main/java/com/technocorp/ApibusApplication.java']
+    }
+}
 
+// task to gather code coverage from multiple subprojects
+// NOTE: the `JacocoReport` tasks do *not* depend on the `test` task by default. Meaning you have to ensure
+// that `test` (or other tasks generating code coverage) run before generating the report.
+// You can achieve this by calling the `test` lifecycle task manually
+// $ ./gradlew test codeCoverageReport
+tasks.register("codeCoverageReport", JacocoReport) {
+    // If a subproject applies the 'jacoco' plugin, add the result it to the report
+
+    subprojects { subproject ->
+        subproject.plugins.withType(JacocoPlugin).configureEach {
+            subproject.tasks.matching({ t -> t.extensions.findByType(JacocoTaskExtension) }).configureEach { testTask ->
+                sourceSets subproject.sourceSets.main
+                executionData(testTask)
+            }
+
+            // To automatically run `test` every time `./gradlew codeCoverageReport` is called,
+            // you may want to set up a task dependency between them as shown below.
+            // Note that this requires the `test` tasks to be resolved eagerly (see `forEach`) which
+            // may have a negative effect on the configuration time of your build.
+            subproject.tasks.matching({ t -> t.extensions.findByType(JacocoTaskExtension) }).forEach {
+                rootProject.tasks.codeCoverageReport.dependsOn(it)
+            }
+        }
+    }
+
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
 }
 
 allprojects {
@@ -65,6 +107,9 @@ project(':api-controller') {
 }
 
 project(':api-service') {
+
+    apply plugin: 'jacoco'
+
     dependencies {
         implementation project(':api-persistence')
         implementation 'org.apache.commons:commons-lang3:3.12.0'

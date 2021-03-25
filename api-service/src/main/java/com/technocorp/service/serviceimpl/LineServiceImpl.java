@@ -11,12 +11,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.technocorp.service.util.StringMessages.*;
 import static java.util.Objects.isNull;
@@ -59,9 +61,7 @@ public class LineServiceImpl implements LineService {
 
     public void save(LineServiceDTO line) {
         Objects.requireNonNull(line);
-        if (lineRepository.existsByCodeIgnoreCase(line.getCode()) &&
-                lineRepository.findByCodeIgnoreCase(line.getCode())
-                        .getName().equals(line.getName())) {
+        if (lineBsonRepository.existsByCodeIgnoreCase(line.getCode())){
             throw new ResponseStatusException(CONFLICT, ALREADY_EXISTS);
         }
 
@@ -71,7 +71,7 @@ public class LineServiceImpl implements LineService {
     public void update(String code, LineServiceDTO line) {
         Objects.requireNonNull(code, NULL_CODE_MSG);
         Objects.requireNonNull(line);
-        if (!lineRepository.existsByCodeIgnoreCase(code)) {
+        if (!lineBsonRepository.existsByCodeIgnoreCase(code)) {
             throw new ResponseStatusException(BAD_REQUEST, NOT_FOUND);
         }
 
@@ -94,7 +94,8 @@ public class LineServiceImpl implements LineService {
 
     private LineBson findByCode(String code) {
         Objects.requireNonNull(code, NULL_CODE_MSG);
-        return lineBsonRepository.findByCodeIgnoreCase(code);
+        return Optional.ofNullable(lineBsonRepository.findByCodeIgnoreCase(code))
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,NOT_FOUND));
     }
 
 }

@@ -6,3 +6,8 @@ services:
     image: mongo
     ports:
       - "8081:27017"
+
+  sonarqube:
+    image:  library/sonarqube:8.6-community
+    ports:
+    - "9000:9000"

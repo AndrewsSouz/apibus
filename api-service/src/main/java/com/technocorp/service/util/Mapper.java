@@ -1,10 +1,9 @@
 package com.technocorp.service.util;
 
+import com.technocorp.persistence.model.dto.LineControllerDTO;
 import com.technocorp.persistence.model.dto.LineServiceDTO;
 import com.technocorp.persistence.model.line.Line;
-import com.technocorp.persistence.model.dto.LineControllerDTO;
 import com.technocorp.persistence.model.line.LineBson;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -57,5 +56,16 @@ public class Mapper {
                     .build())
                     .orElseThrow(() -> new ResponseStatusException(
                             BAD_GATEWAY, UNEXPECTED_ERROR));
+
+    public static final Function<Line, LineServiceDTO> fromLineToServiceDTO =
+            line -> Optional.ofNullable(LineServiceDTO.builder()
+                    .name(line.getName())
+                    .code(line.getCode())
+                    .itinerary(line.getItinerary())
+                    .build())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            BAD_GATEWAY, UNEXPECTED_ERROR));
+
+
 
 }

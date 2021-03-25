@@ -1,6 +1,5 @@
 package com.technocorp.service.serviceimpl;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.technocorp.persistence.model.address.AddressCoordinateWrapper;
 import com.technocorp.persistence.model.line.Line;
 import com.technocorp.persistence.repository.LineRepository;
@@ -26,7 +25,7 @@ import static java.lang.Thread.sleep;
 
 
 @Service
-public class IntegrationServiceImpl {
+public class IntegrationService {
 
 
 
@@ -35,9 +34,9 @@ public class IntegrationServiceImpl {
     private final LineRepository lineRepository;
 
     @Autowired
-    public IntegrationServiceImpl(RestTemplate restTemplate,
-                                  StringBuilder builder,
-                                  LineRepository lineRepository) {
+    public IntegrationService(RestTemplate restTemplate,
+                              StringBuilder builder,
+                              LineRepository lineRepository) {
         this.lineRepository = lineRepository;
         this.builder = builder;
         this.restTemplate = restTemplate;
@@ -58,7 +57,6 @@ public class IntegrationServiceImpl {
                             try {
                                 sleep(60);
                             } catch (InterruptedException e) {
-                                e.printStackTrace();
                                 Thread.currentThread().interrupt();
                             }
                         }
@@ -96,8 +94,6 @@ public class IntegrationServiceImpl {
                         Double.parseDouble(point.get("lat")),
                         Double.parseDouble(point.get("lng"))
                 ))).collect(Collectors.toList()));
-
-        System.out.println(map.get("nome"));
 
         return Line.builder()
                 .id(map.get("idlinha").toString())

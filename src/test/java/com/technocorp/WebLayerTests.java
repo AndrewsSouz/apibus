@@ -31,16 +31,6 @@ class WebLayerTests {
     }
 
     @Test
-    @DisplayName("Expect conflict between parameters")
-    void whenPassTwoParamsInFindExpectStatusBadRequest() throws Exception {
-        this.mockMvc.perform(get("/line")
-        .param("name","parque")
-        .param("code","637-1"))
-                .andExpect(status().isBadRequest());
-
-    }
-
-    @Test
     void shouldReturnAListOfLinesByRange() throws Exception {
         this.mockMvc.perform(get("/line/search")
                 .param("lat", "-31.000000")
@@ -50,13 +40,6 @@ class WebLayerTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
-    @Test
-    void WhenFindByRangeExpectStatusBadRequest() throws Exception {
-        this.mockMvc.perform(get("/line/search")
-                .param("lat", "-31.000000")
-                .param("lng", "-51.000000"))
-                .andExpect(status().isBadRequest());
-    }
 
 
 }
